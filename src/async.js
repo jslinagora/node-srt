@@ -64,11 +64,13 @@ class AsyncSRT extends EventEmitter {
     const callback = this._workCbQueue.shift();
 
     if (data.err) {
-      console.error('AsyncSRT: Error from task-runner:', data.err.message,
-        '\n  Binding call:', traceCallToString(data.call.method, data.call.args),
-        //'\n  Stacktrace:', data.err.stack
-        );
-      this.emit('error', data.err.message)
+      if (!data.call.method == 'read') {
+        console.error('AsyncSRT: Error from task-runner:', data.err.message,
+          '\n  Binding call:', traceCallToString(data.call.method, data.call.args),
+          //'\n  Stacktrace:', data.err.stack
+          );
+        this.emit('error', data.err.message)
+      }
       return;
     }
 
